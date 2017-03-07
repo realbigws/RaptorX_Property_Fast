@@ -12,10 +12,31 @@ Sheng Wang
 Email:
 realbigws@gmail.com
 
+
+============
 Publication:
+============
+
+[1]
 RaptorX-Property: a Web Server for Protein Structure Property Prediction
-       Sheng Wang#, Wei Li, Shiwang Liu, Jinbo Xu
+       Sheng Wang#*, Wei Li*, Shiwang Liu, Jinbo Xu#
                                             Nucleic Acids Research, 2016
+
+[2]
+Protein Secondary Structure Prediction Using Deep Convolutional Neural Fields
+       Sheng Wang#, Jian Peng, Jianzhu Ma, Jinbo Xu#
+                                            Scientific Reports, 2016
+
+[3]
+AUCpreD: Proteome-level Protein Disorder Prediction by AUC-maximized Deep Convolutional Neural Fields
+       Sheng Wang#, Jianzhu Ma, Jinbo Xu#
+                                            ECCB, 2016
+                                            Bioinformatics, 2016
+
+[4]
+AUC-maximized Deep Convolutional Neural Fields for Protein Sequence Labeling
+       Sheng Wang, Siqi Sun, Jinbo Xu#
+                                            ECML/PKDD, 2016
 
 
 ========
