@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# This is a simple script which will carry out all of the basic steps
+# required to make a PSIPRED prediction. Note that it assumes that the
+# following programs are available in the appropriate directories:
+# seq2mtx - PSIPRED V3 program
+# psipred - PSIPRED V3 program
+# psipass2 - PSIPRED V3 program
+
+# NOTE: Script modified to be more cluster friendly (DTJ April 2008)
+
+# Where the PSIPRED V3 programs have been installed
+execdir="./bin"
+
+# Where the PSIPRED V3 data files have been installed
+datadir="./data"
+
+
+fulnam=`basename $1`
+relnam=${fulnam%.*}
+dirnam=`dirname $1`
+
+# set name
+basename=$dirnam/$relnam
+rootname=$relnam
+outname=$basename.chk
+
+# Generate a "unique" temporary filename root
+hostid=`hostid`
+tmproot=psitmp$$$hostid
+
+echo "Generating mtx file from sequence" $1 "..."
+
+$execdir/seq2mtx $1 > $tmproot.mtx
+if [ $? -ne 0 ] 
+then
+    echo "FATAL: Error whilst running makemat - script terminated!"
+    exit 1
+fi
+
+echo "Predicting secondary structure based on single sequence ..."
+echo Pass1 ...
+
+$execdir/psipred $tmproot.mtx $datadir/weights.dat $datadir/weights.dat2 $datadir/weights.dat3 > $rootname.ss
+if [ $? -ne 0 ]
+then
+    echo "FATAL: Error whilst running psipred - script terminated!"
+    exit 1
+fi
+
+echo Pass2 ...
+
+$execdir/psipass2 $datadir/weights_p2.dat 1 1.0 1.0 $rootname.ss2 $rootname.ss > $rootname.horiz
+if [ $? -ne 0 ]
+then
+    echo "FATAL: Error whilst running psipass2 - script terminated!"
+    exit 1
+fi
+
+
+# Run SOLVPRED
+$execdir/solvpred $tmproot.mtx $datadir/weights_solv.dat > $rootname.solv
+if [ $? -ne 0 ]
+then
+    echo "FATAL: Error whilst running MetaPSICOV solvpred - script terminated!"
+    exit 1
+fi
+
+
+# Remove temporary files
+
+echo Cleaning up ...
+rm -f $tmproot.* error.log
+
+echo "Final output files:" $rootname.ss2 $rootname.horiz
+echo "Finished."

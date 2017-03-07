@@ -1,0 +1,124 @@
+===================================
+RaptorX Property Standalone Package
+(v1.01) 2017.01.06 
+===================================
+
+Title:
+RaptorX-Property: a Standalone Package for Protein Structure Property Prediction
+
+Author: 
+Sheng Wang
+
+Email:
+realbigws@gmail.com
+
+Publication:
+RaptorX-Property: a Web Server for Protein Structure Property Prediction
+Sheng Wang#, Wei Li, Shiwang Liu, Jinbo Xu
+Nucleic Acids Research, 2016
+
+
+========
+Install:
+========
+
+1. download the package
+
+git clone https://bitbucket.org/realbigws/raptorx_property_fast
+cd raptorx_property_fast
+
+--------------
+
+2. compile
+
+cd source_code/
+	make
+cd ../
+
+
+=========
+Database:
+=========
+
+1. if databases/uniprot20 not exist, create it by 
+
+mkdir -p databases/uniprot20
+
+
+2. download the UniProt20 database from the following link:
+
+http://wwwuser.gwdg.de/~compbiol/data/hhsuite/databases/hhsuite_dbs/uniprot20_2016_02.tgz
+
+uncompressed it, and move all files to databases/uniprot20
+
+
+3. if other version of UniProt20 is applied, then use '-d uniprot20' option in ./Fast_TGT.sh
+
+
+
+======
+Usage:
+======
+
+./oneline_command.sh <input_fasta> [cpu_number] [PROF_or_NOT]
+
+-------
+
+Here the first input argument is the input sequence in FASTA format,
+the second input is the CPU number,
+the third input is to use profile or not.
+
+
+================
+Running example:
+================
+
+1. use sequence profile:
+        cp example/T0530.fasta .
+        cp example/T0530.tgt .
+        ./oneline_command.sh T0530.fasta 1 1
+
+or,
+	./oneline_command.sh example/T0530.fasta 1 1
+
+-----------------------
+
+2. not use sequence profile:
+        ./oneline_command.sh example/T0530.fasta 1 0
+
+-----------------------
+
+The output files should be found in the tmp/T0530/ folder
+
+
+=============
+Output files:
+=============
+
+1. overall detailed results:
+	SeqID.all
+
+e.g., file 'T0530.all' in tmp/T0530/ folder. This file contains all the detail prediction results for Secondary Structure Element (SS3 and SS8), Solvent Accessbility (ACC), and Order/Disorder prediction (DISO)
+
+------------------
+
+2. detailed results in separate files:
+	SeqID.ss3
+	SeqID.ss8
+	SeqID.acc
+	SeqID.diso
+
+These files contain the detail prediction results in the form of probability.
+
+------------------
+
+3. simple results in separate files:
+	SeqID.ss3_simp
+	SeqID.ss8_simp
+	SeqID.acc_simp
+	SeqID.diso_simp
+
+These files contain the simple predicion results in onee line.
+
+------------------
+
