@@ -35,6 +35,15 @@ cd source_code/
 	make
 cd ../
 
+--------------
+
+3. setup
+
+./setup.pl
+
+[note]:
+before you run anything, type the above command for configuration just for once.
+
 
 =========
 Database:
