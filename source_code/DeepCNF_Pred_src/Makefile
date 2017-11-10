@@ -2,7 +2,7 @@
 
 # make the subdir first
 CXX = g++
-FLAG = -O3 -fopenmp
+FLAG = -O3
 SHELL :=/bin/bash
 
 # compile directory

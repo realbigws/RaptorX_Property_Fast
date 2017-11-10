@@ -1,6 +1,6 @@
 CXX = g++
-CCFLAGS = -O3 -Wall -ffast-math -fopenmp
-#CCFLAGS = -O3 -Wall -ffast-math -DNO_OPENMP
+#CCFLAGS = -O3 -Wall -ffast-math -fopenmp
+CCFLAGS = -O3 -Wall -ffast-math -DNO_OPENMP
 OBJ = MSA_To_PSSM.o getopt.o blast_mat.o blast_util.o blast_stat.o blast_pssm.o cdhit_util.o cdhit_scomat.o cdhit_option.o cdhit_param.o cdhit_seq.o cdhit_table.o cdhit_buffer.o cdhit_seqdb.o
 
 make: $(OBJ)

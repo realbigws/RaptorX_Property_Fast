@@ -9,7 +9,7 @@
 #include <map>
 #include <string>
 #include <string.h>
-#include <omp.h>
+//#include <omp.h>
 #include "getopt.h"
 #include "DeepCNF.h"
 #include "DeepCNF_Misc.h"
