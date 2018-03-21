@@ -10,7 +10,7 @@ tgt_file=$1
 tmp_root=$2
 
 # ---- process -----#
-RaptorX_HOME=~/GitBucket/RaptorX_Property_Fast
+RaptorX_HOME=~/RaptorX_Property_Fast
 fulnam=`basename $tgt_file`
 relnam=${fulnam%.*}
 mkdir -p $RaptorX_HOME/$tmp_root

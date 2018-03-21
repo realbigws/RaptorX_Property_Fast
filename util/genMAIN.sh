@@ -14,7 +14,7 @@ rootname=R$bname
 
 
 #------ directory ------#
-RaptorX_HOME=~/GitBucket/RaptorX_Property_Fast
+RaptorX_HOME=~/RaptorX_Property_Fast
 A3M_To_PSI=$RaptorX_HOME/util/A3M_To_PSI
 MSA_To_PSSM=$RaptorX_HOME/util/MSA_To_PSSM
 HHMAKE=$RaptorX_HOME/util/hhmake

@@ -37,7 +37,7 @@ curdir="$(pwd)"
 
 # ----- main directory ---#
 util=bin
-RaptorX_HOME=~/wstest/RaptorX_Property_Fast
+RaptorX_HOME=~/RaptorX_Property_Fast
 #-> check directory
 if [ ! -f "$RaptorX_HOME/PDBTM_Topology_Pred.sh" ]
 then

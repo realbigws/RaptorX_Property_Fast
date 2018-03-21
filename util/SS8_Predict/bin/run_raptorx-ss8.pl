@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 $vvv=0;
-$raptorx=$ENV{"HOME"}."/GitBucket/RaptorX_Property_Fast";
+$raptorx=$ENV{"HOME"}."/RaptorX_Property_Fast";
 
 #main directory
 $CNFHOME=$raptorx."/util/SS8_Predict";

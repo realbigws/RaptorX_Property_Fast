@@ -28,7 +28,7 @@ relnam=${fulnam%.*}
 OUT_DIR=$2
 
 # ------- run ProtProp Server --------- #
-Server_Root=~/wstest/RaptorX_Property_Fast
+Server_Root=~/RaptorX_Property_Fast
 cp $1 $Server_Root/$relnam.fasta
 
 # ---- check if TGT file exist ----- #

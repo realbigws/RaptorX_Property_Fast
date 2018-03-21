@@ -10,7 +10,7 @@ tgt_name=$1
 tmp_root=$2
 
 # ---- process -----#
-RaptorX_HOME=~/GitBucket/RaptorX_Property_Fast
+RaptorX_HOME=~/RaptorX_Property_Fast
 SS8_Pred=$RaptorX_HOME/util/SS8_Predict/bin/run_raptorx-ss8.pl
 $SS8_Pred $RaptorX_HOME/$tmp_root/$tgt_name.seq -pssm $RaptorX_HOME/$tmp_root/$tgt_name.psp -outdir $RaptorX_HOME/$tmp_root/
 

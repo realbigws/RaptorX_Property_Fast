@@ -8,7 +8,7 @@ fi
 # $1 the sequence name with suffix .seq
 # $2 out directory
 
-RaptorX_HOME=~/GitBucket/RaptorX_Property_Fast
+RaptorX_HOME=~/RaptorX_Property_Fast
 PSIPREDDIR=$RaptorX_HOME/util/PSIPRED
 INPUTMTX=$1
 DESTDIR=$2
