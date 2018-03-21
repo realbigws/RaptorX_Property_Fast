@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ $# -lt 1 ]
+if [ $# -lt 2 ]
 then
-	echo "Usage: ./protprop_server.sh <input_fasta> [cpu_number] [PROF_or_NOT] "
+	echo "Usage: ./protprop_server.sh <input_fasta> <out_dir> [cpu_number] [PROF_or_NOT] "
 	exit
 fi
 CurRoot="$(pwd)"
@@ -10,24 +10,25 @@ CurRoot="$(pwd)"
 
 # ------- CPU number ------ #
 BindX_CPU=1
-if [ $# -gt 1 ]
+if [ $# -gt 2 ]
 then
-	BindX_CPU=$2
+	BindX_CPU=$3
 fi
 
 # ------- use profile or not ---- #
 PROF_or_NOT=1
-if [ $# -gt 2 ]
+if [ $# -gt 3 ]
 then
-	PROF_or_NOT=$3
+	PROF_or_NOT=$4
 fi
 
 # ------ part 0 ------ # related path
 fulnam=`basename $1`
 relnam=${fulnam%.*}
+OUT_DIR=$2
 
 # ------- run ProtProp Server --------- #
-Server_Root=~/GitBucket/RaptorX_Property_Fast
+Server_Root=~/wstest/RaptorX_Property_Fast
 cp $1 $Server_Root/$relnam.fasta
 
 # ---- check if TGT file exist ----- #
@@ -41,8 +42,8 @@ fi
 # ---- running ---------#
 cd $Server_Root
 	#-> 0. create 'tmp' folder
-	rm -rf tmp/$relnam
-	mkdir -p tmp/$relnam
+	rm -rf $OUT_DIR/$relnam
+	mkdir -p $OUT_DIR/$relnam
 	tmp=TMP"_"$relnam"_"$RANDOM
 	mkdir -p $tmp/
 	#------- start -------#
@@ -223,96 +224,96 @@ cd $Server_Root
 	then
         	exit 1
 	fi
-	# ----------- copy to tmp/ ----- #
+	# ----------- copy to $OUT_DIR/ ----- #
 	if [ $PROF_or_NOT -eq 1 ] #-> use profile
 	then
 
-		cp util/0README tmp/$relnam/0README.txt
-		cp $tmp/$relnam.fasta_raw tmp/$relnam/$relnam.fasta.txt
-		cp $tmp/$relnam.seq tmp/$relnam/$relnam.seq.txt
-		awk '{if(NF>0){print $0}}' $tmp/$relnam.ss3 > tmp/$relnam/$relnam.ss3.txt
-		awk '{if(NF>0){print $0}}' $tmp/$relnam.ss8 > tmp/$relnam/$relnam.ss8.txt
-		awk '{if(NF>0){print $0}}' $tmp/$relnam.acc > tmp/$relnam/$relnam.acc.txt
-		awk '{if(NF>0){print $0}}' $tmp/$relnam.diso > tmp/$relnam/$relnam.diso.txt
+		cp util/0README $OUT_DIR/$relnam/0README.txt
+		cp $tmp/$relnam.fasta_raw $OUT_DIR/$relnam/$relnam.fasta.txt
+		cp $tmp/$relnam.seq $OUT_DIR/$relnam/$relnam.seq.txt
+		awk '{if(NF>0){print $0}}' $tmp/$relnam.ss3 > $OUT_DIR/$relnam/$relnam.ss3.txt
+		awk '{if(NF>0){print $0}}' $tmp/$relnam.ss8 > $OUT_DIR/$relnam/$relnam.ss8.txt
+		awk '{if(NF>0){print $0}}' $tmp/$relnam.acc > $OUT_DIR/$relnam/$relnam.acc.txt
+		awk '{if(NF>0){print $0}}' $tmp/$relnam.diso > $OUT_DIR/$relnam/$relnam.diso.txt
 		# make simple prediction
 		#-> SS3
-		echo ">$relnam" > tmp/$relnam/$relnam.ss3_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.ss3.txt | awk '{printf $2}END{printf "\n"}' >> tmp/$relnam/$relnam.ss3_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.ss3.txt | awk '{printf $3}END{printf "\n"}' >> tmp/$relnam/$relnam.ss3_simp.txt
+		echo ">$relnam" > $OUT_DIR/$relnam/$relnam.ss3_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.ss3.txt | awk '{printf $2}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.ss3_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.ss3.txt | awk '{printf $3}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.ss3_simp.txt
 		#-> SS8
-		echo ">$relnam" > tmp/$relnam/$relnam.ss8_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.ss8.txt | awk '{printf $2}END{printf "\n"}' >> tmp/$relnam/$relnam.ss8_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.ss8.txt | awk '{printf $3}END{printf "\n"}' >> tmp/$relnam/$relnam.ss8_simp.txt
+		echo ">$relnam" > $OUT_DIR/$relnam/$relnam.ss8_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.ss8.txt | awk '{printf $2}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.ss8_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.ss8.txt | awk '{printf $3}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.ss8_simp.txt
 		#-> ACC
-		echo ">$relnam" > tmp/$relnam/$relnam.acc_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.acc.txt | awk '{printf $2}END{printf "\n"}' >> tmp/$relnam/$relnam.acc_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.acc.txt | awk '{printf $3}END{printf "\n"}' >> tmp/$relnam/$relnam.acc_simp.txt
+		echo ">$relnam" > $OUT_DIR/$relnam/$relnam.acc_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.acc.txt | awk '{printf $2}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.acc_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.acc.txt | awk '{printf $3}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.acc_simp.txt
 		#-> DISO
-		echo ">$relnam" > tmp/$relnam/$relnam.diso_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.diso.txt | awk '{printf $2}END{printf "\n"}' >> tmp/$relnam/$relnam.diso_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.diso.txt | awk '{printf $3}END{printf "\n"}' >> tmp/$relnam/$relnam.diso_simp.txt
+		echo ">$relnam" > $OUT_DIR/$relnam/$relnam.diso_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.diso.txt | awk '{printf $2}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.diso_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.diso.txt | awk '{printf $3}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.diso_simp.txt
 		# make overall prediction
-		head -n1 tmp/$relnam/$relnam.fasta.txt > tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.seq.txt >> tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.ss3_simp.txt >> tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.ss8_simp.txt >> tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.acc_simp.txt >> tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.diso_simp.txt >> tmp/$relnam/$relnam.all.txt
-		printf "\n\n" >> tmp/$relnam/$relnam.all.txt
-		printf "\n\n#---------------- details of SS3 prediction ---------------------------\n" > tmp/$relnam/$relnam.all.ss3
-		printf "\n\n#---------------- details of SS8 prediction ---------------------------\n" > tmp/$relnam/$relnam.all.ss8
-		printf "\n\n#---------------- details of ACC prediction ---------------------------\n" > tmp/$relnam/$relnam.all.acc
-		printf "\n\n#---------------- details of DISO prediction --------------------------\n" > tmp/$relnam/$relnam.all.diso
-		cat tmp/$relnam/$relnam.all.txt tmp/$relnam/$relnam.all.ss3 tmp/$relnam/$relnam.ss3.txt tmp/$relnam/$relnam.all.ss8 tmp/$relnam/$relnam.ss8.txt tmp/$relnam/$relnam.all.acc tmp/$relnam/$relnam.acc.txt tmp/$relnam/$relnam.all.diso tmp/$relnam/$relnam.diso.txt > tmp/$relnam/$relnam.all.txt_
-		mv tmp/$relnam/$relnam.all.txt_ tmp/$relnam/$relnam.all.txt
-		rm -f tmp/$relnam/$relnam.all.ss3 tmp/$relnam/$relnam.all.ss8 tmp/$relnam/$relnam.all.acc tmp/$relnam/$relnam.all.diso
+		head -n1 $OUT_DIR/$relnam/$relnam.fasta.txt > $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.seq.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.ss3_simp.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.ss8_simp.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.acc_simp.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.diso_simp.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		printf "\n\n" >> $OUT_DIR/$relnam/$relnam.all.txt
+		printf "\n\n#---------------- details of SS3 prediction ---------------------------\n" > $OUT_DIR/$relnam/$relnam.all.ss3
+		printf "\n\n#---------------- details of SS8 prediction ---------------------------\n" > $OUT_DIR/$relnam/$relnam.all.ss8
+		printf "\n\n#---------------- details of ACC prediction ---------------------------\n" > $OUT_DIR/$relnam/$relnam.all.acc
+		printf "\n\n#---------------- details of DISO prediction --------------------------\n" > $OUT_DIR/$relnam/$relnam.all.diso
+		cat $OUT_DIR/$relnam/$relnam.all.txt $OUT_DIR/$relnam/$relnam.all.ss3 $OUT_DIR/$relnam/$relnam.ss3.txt $OUT_DIR/$relnam/$relnam.all.ss8 $OUT_DIR/$relnam/$relnam.ss8.txt $OUT_DIR/$relnam/$relnam.all.acc $OUT_DIR/$relnam/$relnam.acc.txt $OUT_DIR/$relnam/$relnam.all.diso $OUT_DIR/$relnam/$relnam.diso.txt > $OUT_DIR/$relnam/$relnam.all.txt_
+		mv $OUT_DIR/$relnam/$relnam.all.txt_ $OUT_DIR/$relnam/$relnam.all.txt
+		rm -f $OUT_DIR/$relnam/$relnam.all.ss3 $OUT_DIR/$relnam/$relnam.all.ss8 $OUT_DIR/$relnam/$relnam.all.acc $OUT_DIR/$relnam/$relnam.all.diso
 
 	else                      #-> not use profile
 
-		cp util/0README_noprof tmp/$relnam/0README.txt
-		cp $tmp/$relnam.fasta_raw tmp/$relnam/$relnam.fasta.txt
-		cp $tmp/$relnam.seq tmp/$relnam/$relnam.seq.txt
-		awk '{if(NF>0){print $0}}' $tmp/$relnam.ss3_ > tmp/$relnam/$relnam.ss3_noprof.txt
-		awk '{if(NF>0){print $0}}' $tmp/$relnam.ss8_ > tmp/$relnam/$relnam.ss8_noprof.txt
-		awk '{if(NF>0){print $0}}' $tmp/$relnam.acc_ > tmp/$relnam/$relnam.acc_noprof.txt
-		awk '{if(NF>0){print $0}}' $tmp/$relnam.diso_ > tmp/$relnam/$relnam.diso_noprof.txt
+		cp util/0README_noprof $OUT_DIR/$relnam/0README.txt
+		cp $tmp/$relnam.fasta_raw $OUT_DIR/$relnam/$relnam.fasta.txt
+		cp $tmp/$relnam.seq $OUT_DIR/$relnam/$relnam.seq.txt
+		awk '{if(NF>0){print $0}}' $tmp/$relnam.ss3_ > $OUT_DIR/$relnam/$relnam.ss3_noprof.txt
+		awk '{if(NF>0){print $0}}' $tmp/$relnam.ss8_ > $OUT_DIR/$relnam/$relnam.ss8_noprof.txt
+		awk '{if(NF>0){print $0}}' $tmp/$relnam.acc_ > $OUT_DIR/$relnam/$relnam.acc_noprof.txt
+		awk '{if(NF>0){print $0}}' $tmp/$relnam.diso_ > $OUT_DIR/$relnam/$relnam.diso_noprof.txt
 		# make simple prediction
 		#-> SS3
-		echo ">$relnam" > tmp/$relnam/$relnam.ss3_noprof_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.ss3_noprof.txt | awk '{printf $2}END{printf "\n"}' >> tmp/$relnam/$relnam.ss3_noprof_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.ss3_noprof.txt | awk '{printf $3}END{printf "\n"}' >> tmp/$relnam/$relnam.ss3_noprof_simp.txt
+		echo ">$relnam" > $OUT_DIR/$relnam/$relnam.ss3_noprof_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.ss3_noprof.txt | awk '{printf $2}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.ss3_noprof_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.ss3_noprof.txt | awk '{printf $3}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.ss3_noprof_simp.txt
 		#-> SS8
-		echo ">$relnam" > tmp/$relnam/$relnam.ss8_noprof_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.ss8_noprof.txt | awk '{printf $2}END{printf "\n"}' >> tmp/$relnam/$relnam.ss8_noprof_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.ss8_noprof.txt | awk '{printf $3}END{printf "\n"}' >> tmp/$relnam/$relnam.ss8_noprof_simp.txt
+		echo ">$relnam" > $OUT_DIR/$relnam/$relnam.ss8_noprof_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.ss8_noprof.txt | awk '{printf $2}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.ss8_noprof_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.ss8_noprof.txt | awk '{printf $3}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.ss8_noprof_simp.txt
 		#-> ACC
-		echo ">$relnam" > tmp/$relnam/$relnam.acc_noprof_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.acc_noprof.txt | awk '{printf $2}END{printf "\n"}' >> tmp/$relnam/$relnam.acc_noprof_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.acc_noprof.txt | awk '{printf $3}END{printf "\n"}' >> tmp/$relnam/$relnam.acc_noprof_simp.txt
+		echo ">$relnam" > $OUT_DIR/$relnam/$relnam.acc_noprof_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.acc_noprof.txt | awk '{printf $2}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.acc_noprof_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.acc_noprof.txt | awk '{printf $3}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.acc_noprof_simp.txt
 		#-> DISO
-		echo ">$relnam" > tmp/$relnam/$relnam.diso_noprof_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.diso_noprof.txt | awk '{printf $2}END{printf "\n"}' >> tmp/$relnam/$relnam.diso_noprof_simp.txt
-		grep -v "#" tmp/$relnam/$relnam.diso_noprof.txt | awk '{printf $3}END{printf "\n"}' >> tmp/$relnam/$relnam.diso_noprof_simp.txt
+		echo ">$relnam" > $OUT_DIR/$relnam/$relnam.diso_noprof_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.diso_noprof.txt | awk '{printf $2}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.diso_noprof_simp.txt
+		grep -v "#" $OUT_DIR/$relnam/$relnam.diso_noprof.txt | awk '{printf $3}END{printf "\n"}' >> $OUT_DIR/$relnam/$relnam.diso_noprof_simp.txt
 		# make overall prediction
-		head -n1 tmp/$relnam/$relnam.fasta.txt > tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.seq.txt >> tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.ss3_noprof_simp.txt >> tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.ss8_noprof_simp.txt >> tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.acc_noprof_simp.txt >> tmp/$relnam/$relnam.all.txt
-		tail -n1 tmp/$relnam/$relnam.diso_noprof_simp.txt >> tmp/$relnam/$relnam.all.txt
-		printf "\n\n" >> tmp/$relnam/$relnam.all.txt
-		printf "\n\n#---------------- details of SS3 prediction ---------------------------\n" > tmp/$relnam/$relnam.all.ss3
-		printf "\n\n#---------------- details of SS8 prediction ---------------------------\n" > tmp/$relnam/$relnam.all.ss8
-		printf "\n\n#---------------- details of ACC prediction ---------------------------\n" > tmp/$relnam/$relnam.all.acc
-		printf "\n\n#---------------- details of DISO prediction --------------------------\n" > tmp/$relnam/$relnam.all.diso
-		cat tmp/$relnam/$relnam.all.txt tmp/$relnam/$relnam.all.ss3 tmp/$relnam/$relnam.ss3_noprof.txt tmp/$relnam/$relnam.all.ss8 tmp/$relnam/$relnam.ss8_noprof.txt tmp/$relnam/$relnam.all.acc tmp/$relnam/$relnam.acc_noprof.txt tmp/$relnam/$relnam.all.diso tmp/$relnam/$relnam.diso_noprof.txt > tmp/$relnam/$relnam.all.txt_
-		mv tmp/$relnam/$relnam.all.txt_ tmp/$relnam/$relnam.all.txt
-		mv tmp/$relnam/$relnam.all.txt tmp/$relnam/$relnam.all_noprof.txt
-		rm -f tmp/$relnam/$relnam.all.ss3 tmp/$relnam/$relnam.all.ss8 tmp/$relnam/$relnam.all.acc tmp/$relnam/$relnam.all.diso
+		head -n1 $OUT_DIR/$relnam/$relnam.fasta.txt > $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.seq.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.ss3_noprof_simp.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.ss8_noprof_simp.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.acc_noprof_simp.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		tail -n1 $OUT_DIR/$relnam/$relnam.diso_noprof_simp.txt >> $OUT_DIR/$relnam/$relnam.all.txt
+		printf "\n\n" >> $OUT_DIR/$relnam/$relnam.all.txt
+		printf "\n\n#---------------- details of SS3 prediction ---------------------------\n" > $OUT_DIR/$relnam/$relnam.all.ss3
+		printf "\n\n#---------------- details of SS8 prediction ---------------------------\n" > $OUT_DIR/$relnam/$relnam.all.ss8
+		printf "\n\n#---------------- details of ACC prediction ---------------------------\n" > $OUT_DIR/$relnam/$relnam.all.acc
+		printf "\n\n#---------------- details of DISO prediction --------------------------\n" > $OUT_DIR/$relnam/$relnam.all.diso
+		cat $OUT_DIR/$relnam/$relnam.all.txt $OUT_DIR/$relnam/$relnam.all.ss3 $OUT_DIR/$relnam/$relnam.ss3_noprof.txt $OUT_DIR/$relnam/$relnam.all.ss8 $OUT_DIR/$relnam/$relnam.ss8_noprof.txt $OUT_DIR/$relnam/$relnam.all.acc $OUT_DIR/$relnam/$relnam.acc_noprof.txt $OUT_DIR/$relnam/$relnam.all.diso $OUT_DIR/$relnam/$relnam.diso_noprof.txt > $OUT_DIR/$relnam/$relnam.all.txt_
+		mv $OUT_DIR/$relnam/$relnam.all.txt_ $OUT_DIR/$relnam/$relnam.all.txt
+		mv $OUT_DIR/$relnam/$relnam.all.txt $OUT_DIR/$relnam/$relnam.all_noprof.txt
+		rm -f $OUT_DIR/$relnam/$relnam.all.ss3 $OUT_DIR/$relnam/$relnam.all.ss8 $OUT_DIR/$relnam/$relnam.all.acc $OUT_DIR/$relnam/$relnam.all.diso
 
 	fi
 	# --------- make a zip file ---- #
-	cd tmp/
+	cd $OUT_DIR/
 		#-> for Windows
 		cd $relnam/
 		rm -rf Windows
@@ -332,43 +333,43 @@ cd $Server_Root
 	# --------- rename not use profile mode ----- #
 	if [ $PROF_or_NOT -ne 1 ]
 	then
-		mv tmp/$relnam/0README.txt tmp/$relnam/0README_noprof
-		mv tmp/$relnam/$relnam.fasta.txt tmp/$relnam/$relnam.fasta
-		mv tmp/$relnam/$relnam.seq.txt tmp/$relnam/$relnam.seq
+		mv $OUT_DIR/$relnam/0README.txt $OUT_DIR/$relnam/0README_noprof
+		mv $OUT_DIR/$relnam/$relnam.fasta.txt $OUT_DIR/$relnam/$relnam.fasta
+		mv $OUT_DIR/$relnam/$relnam.seq.txt $OUT_DIR/$relnam/$relnam.seq
 		#-> raw prediction result
-		mv tmp/$relnam/$relnam.ss8_noprof.txt tmp/$relnam/$relnam.ss8
-		mv tmp/$relnam/$relnam.ss3_noprof.txt tmp/$relnam/$relnam.ss3
-		mv tmp/$relnam/$relnam.acc_noprof.txt tmp/$relnam/$relnam.acc
-		mv tmp/$relnam/$relnam.diso_noprof.txt tmp/$relnam/$relnam.diso
+		mv $OUT_DIR/$relnam/$relnam.ss8_noprof.txt $OUT_DIR/$relnam/$relnam.ss8
+		mv $OUT_DIR/$relnam/$relnam.ss3_noprof.txt $OUT_DIR/$relnam/$relnam.ss3
+		mv $OUT_DIR/$relnam/$relnam.acc_noprof.txt $OUT_DIR/$relnam/$relnam.acc
+		mv $OUT_DIR/$relnam/$relnam.diso_noprof.txt $OUT_DIR/$relnam/$relnam.diso
 		#-> simp prediction result
-		mv tmp/$relnam/$relnam.ss8_noprof_simp.txt tmp/$relnam/$relnam.ss8_simp
-		mv tmp/$relnam/$relnam.ss3_noprof_simp.txt tmp/$relnam/$relnam.ss3_simp
-		mv tmp/$relnam/$relnam.acc_noprof_simp.txt tmp/$relnam/$relnam.acc_simp
-		mv tmp/$relnam/$relnam.diso_noprof_simp.txt tmp/$relnam/$relnam.diso_simp
+		mv $OUT_DIR/$relnam/$relnam.ss8_noprof_simp.txt $OUT_DIR/$relnam/$relnam.ss8_simp
+		mv $OUT_DIR/$relnam/$relnam.ss3_noprof_simp.txt $OUT_DIR/$relnam/$relnam.ss3_simp
+		mv $OUT_DIR/$relnam/$relnam.acc_noprof_simp.txt $OUT_DIR/$relnam/$relnam.acc_simp
+		mv $OUT_DIR/$relnam/$relnam.diso_noprof_simp.txt $OUT_DIR/$relnam/$relnam.diso_simp
 		#-> overall prediction result
-		mv tmp/$relnam/$relnam.all_noprof.txt tmp/$relnam/$relnam.all
+		mv $OUT_DIR/$relnam/$relnam.all_noprof.txt $OUT_DIR/$relnam/$relnam.all
 	else
-		mv tmp/$relnam/0README.txt tmp/$relnam/0README
-		mv tmp/$relnam/$relnam.fasta.txt tmp/$relnam/$relnam.fasta
-		mv tmp/$relnam/$relnam.seq.txt tmp/$relnam/$relnam.seq
+		mv $OUT_DIR/$relnam/0README.txt $OUT_DIR/$relnam/0README
+		mv $OUT_DIR/$relnam/$relnam.fasta.txt $OUT_DIR/$relnam/$relnam.fasta
+		mv $OUT_DIR/$relnam/$relnam.seq.txt $OUT_DIR/$relnam/$relnam.seq
 		#-> raw prediction result
-		mv tmp/$relnam/$relnam.ss8.txt tmp/$relnam/$relnam.ss8
-		mv tmp/$relnam/$relnam.ss3.txt tmp/$relnam/$relnam.ss3
-		mv tmp/$relnam/$relnam.acc.txt tmp/$relnam/$relnam.acc
-		mv tmp/$relnam/$relnam.diso.txt tmp/$relnam/$relnam.diso
+		mv $OUT_DIR/$relnam/$relnam.ss8.txt $OUT_DIR/$relnam/$relnam.ss8
+		mv $OUT_DIR/$relnam/$relnam.ss3.txt $OUT_DIR/$relnam/$relnam.ss3
+		mv $OUT_DIR/$relnam/$relnam.acc.txt $OUT_DIR/$relnam/$relnam.acc
+		mv $OUT_DIR/$relnam/$relnam.diso.txt $OUT_DIR/$relnam/$relnam.diso
 		#-> simp prediction result
-		mv tmp/$relnam/$relnam.ss8_simp.txt tmp/$relnam/$relnam.ss8_simp
-		mv tmp/$relnam/$relnam.ss3_simp.txt tmp/$relnam/$relnam.ss3_simp
-		mv tmp/$relnam/$relnam.acc_simp.txt tmp/$relnam/$relnam.acc_simp
-		mv tmp/$relnam/$relnam.diso_simp.txt tmp/$relnam/$relnam.diso_simp
+		mv $OUT_DIR/$relnam/$relnam.ss8_simp.txt $OUT_DIR/$relnam/$relnam.ss8_simp
+		mv $OUT_DIR/$relnam/$relnam.ss3_simp.txt $OUT_DIR/$relnam/$relnam.ss3_simp
+		mv $OUT_DIR/$relnam/$relnam.acc_simp.txt $OUT_DIR/$relnam/$relnam.acc_simp
+		mv $OUT_DIR/$relnam/$relnam.diso_simp.txt $OUT_DIR/$relnam/$relnam.diso_simp
 		#-> overall prediction result
-		mv tmp/$relnam/$relnam.all.txt tmp/$relnam/$relnam.all
+		mv $OUT_DIR/$relnam/$relnam.all.txt $OUT_DIR/$relnam/$relnam.all
 		#-> move tgt files
-		cp $tmp/$relnam.tgt tmp/$relnam/$relnam.tgt
-		cp $tmp/update/$relnam.tgt tmp/$relnam/$relnam.tgt2
+		cp $tmp/$relnam.tgt $OUT_DIR/$relnam/$relnam.tgt
+		cp $tmp/update/$relnam.tgt $OUT_DIR/$relnam/$relnam.tgt2
 	fi
 	# -------- prediction summary -------- #
-	$util/generate_simp_summary_file tmp/$relnam/$relnam.diso tmp/$relnam/$relnam.ss3 tmp/$relnam/$relnam.acc 0.5 tmp/$relnam/$relnam.summary
+	$util/generate_simp_summary_file $OUT_DIR/$relnam/$relnam.diso $OUT_DIR/$relnam/$relnam.ss3 $OUT_DIR/$relnam/$relnam.acc 0.5 $OUT_DIR/$relnam/$relnam.summary
 	
 
 	# ------ remove temporary folder ----- #

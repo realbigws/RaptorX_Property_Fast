@@ -1,12 +1,12 @@
 ===================================
 RaptorX Property Standalone Package
-(v1.01) 2017.01.06 
+(v1.01) 2017.01.06
 ===================================
 
 Title:
 RaptorX-Property: a Standalone Package for Protein Structure Property Prediction
 
-Author: 
+Author:
 Sheng Wang
 
 Email:
@@ -90,13 +90,22 @@ uncompressed it, and move all files to databases/uniprot20
 Usage:
 ======
 
-./oneline_command.sh <input_fasta> [cpu_number] [PROF_or_NOT]
+./oneline_command.sh <input_fasta> <out_dir> [cpu_number] [PROF_or_NOT]
 
 -------
 
 Here the first input argument is the input sequence in FASTA format,
 the second input is the CPU number,
 the third input is to use profile or not.
+
+
+-------
+
+
+./PDBTM_Topology_Pred.sh -i example/1bhaA.tgt -l example/1bhaA.pdbtm
+
+The module to predict transmembrane topology.
+
 
 
 ================
@@ -106,15 +115,15 @@ Running example:
 1. use sequence profile:
         cp example/T0530.fasta .
         cp example/T0530.tgt .
-        ./oneline_command.sh T0530.fasta 1 1
+        ./oneline_command.sh T0530.fasta tmp 1 1
 
 or,
-	./oneline_command.sh example/T0530.fasta 1 1
+	./oneline_command.sh example/T0530.fasta tmp 1 1
 
 -----------------------
 
 2. not use sequence profile:
-        ./oneline_command.sh example/T0530.fasta 1 0
+        ./oneline_command.sh example/T0530.fasta tmp 1 0
 
 -----------------------
 

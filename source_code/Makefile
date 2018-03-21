@@ -10,6 +10,7 @@ DeepCNF_SS_Con_Dir = ./DeepCNF_SS_Con_src/
 DeepCNF_SAS_Con_Dir = ./DeepCNF_SAS_Con_src/
 AcconPred_Dir = ./AcconPred_src/
 Diso_Feature_Make_Dir = ./Diso_Feature_Make_src/
+Memb_Feature_Make_Dir = ./MemProt_Feat_src/
 DeepCNF_Pred_Dir = ./DeepCNF_Pred_src/
 
 
@@ -52,6 +53,8 @@ feat:
 	# ---- Diso_Feature_Make --- #
 	cd $(Diso_Feature_Make_Dir)&&make
 	mv Diso_Feature_Make Diso_Feature_Make_noprof ../bin
+	cd $(Memb_Feature_Make_Dir)&&make
+	mv MemProt_Feat MemProt_Feat_noprof ../bin
 
 pred:
 	# ---- DeepCNF_Pred ---- #

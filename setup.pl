@@ -29,6 +29,22 @@ $cmd="mv ".$cnfhome."/AUCpreD.sh.new ".$cnfhome."/AUCpreD.sh";
 `$cmd`;
 chmod(0755, $cnfhome."/AUCpreD.sh");
 
+# PDBTM_Topology_Pred.sh
+open fhRUN,"<".$cnfhome."/PDBTM_Topology_Pred.sh";
+open fhRUNNEW,">".$cnfhome."/PDBTM_Topology_Pred.sh.new";
+while(<fhRUN>){
+    if(/^RaptorX_HOME=/){
+        print fhRUNNEW "RaptorX_HOME=".$curhome."\n";
+        next;
+    }
+    print fhRUNNEW "$_";
+}
+close fhRUN;
+close fhRUNNEW;
+$cmd="mv ".$cnfhome."/PDBTM_Topology_Pred.sh.new ".$cnfhome."/PDBTM_Topology_Pred.sh";
+`$cmd`;
+chmod(0755, $cnfhome."/PDBTM_Topology_Pred.sh");
+
 # Seq_Feat.sh
 open fhRUN,"<".$cnfhome."/Seq_Feat.sh";
 open fhRUNNEW,">".$cnfhome."/Seq_Feat.sh.new";
@@ -44,6 +60,23 @@ close fhRUNNEW;
 $cmd="mv ".$cnfhome."/Seq_Feat.sh.new ".$cnfhome."/Seq_Feat.sh";
 `$cmd`;
 chmod(0755, $cnfhome."/Seq_Feat.sh");
+
+# Seq_Feat_memb.sh
+open fhRUN,"<".$cnfhome."/Seq_Feat_memb.sh";
+open fhRUNNEW,">".$cnfhome."/Seq_Feat_memb.sh.new";
+while(<fhRUN>){
+    if(/^RaptorX_HOME=/){
+        print fhRUNNEW "RaptorX_HOME=".$curhome."\n";
+        next;
+    }
+    print fhRUNNEW "$_";
+}
+close fhRUN;
+close fhRUNNEW;
+$cmd="mv ".$cnfhome."/Seq_Feat_memb.sh.new ".$cnfhome."/Seq_Feat_memb.sh";
+`$cmd`;
+chmod(0755, $cnfhome."/Seq_Feat_memb.sh");
+
 
 # oneline_command.sh
 open fhRUN,"<".$cnfhome."/oneline_command.sh";

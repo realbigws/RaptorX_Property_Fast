@@ -101,6 +101,12 @@ mkdir -p $tmp_root
 # ---- verify FASTA file -------- #
 seq_file=$relnam.seq
 util/Verify_FASTA $input_fasta $seq_file
+OUT=$?
+if [ $OUT -ne 0 ]
+then
+	echo "failed in util/Verify_FASTA $input_fasta $seq_file"
+	exit 1
+fi
 
 
 # ----- determine coverage ---- #
@@ -127,10 +133,16 @@ then
 	if [ $coverage -eq -2 ]
 	then
 		echo "run HHblits with default parameter without -cov "
-		$HHSUITE/bin/hhblits -i $seq_file -cpu $cpu_num -d databases/uniprot20/$uniprot20 -o $relnam.hhr -oa3m $relnam.a3m -n $iteration
+		$HHSUITE/bin/hhblits -i $seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $relnam.hhr -oa3m $relnam.a3m -n $iteration
 	else
 		echo "run HHblits with -maxfilt 500000 -diff inf -id 99 -cov $coverage"
-		$HHSUITE/bin/hhblits -i $seq_file -cpu $cpu_num -d databases/uniprot20/$uniprot20 -o $relnam.hhr -oa3m $relnam.a3m -n $iteration -maxfilt 500000 -diff inf -id 99 -cov $coverage
+		$HHSUITE/bin/hhblits -i $seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $relnam.hhr -oa3m $relnam.a3m -n $iteration -maxfilt 500000 -diff inf -id 99 -cov $coverage
+	fi
+	OUT=$?
+	if [ $OUT -ne 0 ]
+	then
+		echo "failed in $HHSUITE/bin/hhblits -i $seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $relnam.hhr -oa3m $relnam.a3m -n $iteration"
+		exit 1
 	fi
 	mv $relnam.hhr $tmp_root
 	echo "hhblits done"
@@ -141,6 +153,12 @@ tgt_file=$relnam.tgt
 if [ ! -f "$curdir/$tgt_file" ]
 then
 	./A3M_To_TGT -i $seq_file -I $a3m_file -o $tgt_file -t $tmp_root
+	OUT=$?
+	if [ $OUT -ne 0 ]
+	then
+		echo "failed in ./A3M_To_TGT -i $seq_file -I $a3m_file -o $tgt_file -t $tmp_root"
+		exit 1
+	fi
 fi
 
 # ---- post process ----- #
@@ -151,4 +169,9 @@ then
 fi
 cp $input_fasta $out_root/$relnam.fasta_raw
 mv $seq_file $a3m_file $tgt_file $out_root
+
+
+# ========= exit 0 =========== #
+exit 0
+
 

@@ -88,15 +88,11 @@ bool Options::SetOptionEST( const char *flag, const char *value )
 }
 bool Options::SetOptions( int argc, char *argv[], bool twod, bool est )
 {
-	int i, n;
-	char date[100];
-	strcpy( date, __DATE__ );
-	n = strlen( date );
-	for(i=1; i<n; i++) if( date[i-1] == ' ' && date[i] == ' ' ) date[i] = '0';
 	printf( "================================================================\n" );
-	printf( "Program: CD-HIT, V" CDHIT_VERSION WITH_OPENMP ", %s, " __TIME__ "\n", date );
+	printf( "Program: CD-HIT, V" CDHIT_VERSION WITH_OPENMP "\n");
 	printf( "Command:" );
-	n = 9;
+	int i;
+	int n = 9;
 	for(i=0; i<argc; i++){
 		n += strlen( argv[i] ) + 1;
 		if( n >= 64 ){
