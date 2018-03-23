@@ -31,6 +31,7 @@ usage()
 	echo "-c CPU_num     :  the number of CPUs to be used [default 1]"
 	echo ""
 	echo "-k keep_file   :  keep the intermediate files if its value is 1 [default 0]"
+	echo "                  these files are in /tmp/\${input_name}_diso/. "
 	echo ""
 	exit 1
 }
@@ -174,7 +175,7 @@ fi
 
 # ----- pre process ------ #
 cd $RaptorX_HOME
-tmp=tmp"_"$relnam"_"$RANDOM
+tmp=/tmp/${relnam}_diso/
 mkdir -p $tmp/
 rm -f $tmp/$relnam.seq
 if [ $has_fasta -eq 1 ]

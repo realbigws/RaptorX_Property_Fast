@@ -13,7 +13,6 @@ tmp_root=$2
 RaptorX_HOME=~/RaptorX_Property_Fast
 fulnam=`basename $tgt_file`
 relnam=${fulnam%.*}
-mkdir -p $RaptorX_HOME/$tmp_root
 ACCPred=$RaptorX_HOME/bin/AcconPred
-$ACCPred $tgt_file 1 > $RaptorX_HOME/$tmp_root/$relnam.acc
+$ACCPred $tgt_file 1 > $tmp_root/$relnam.acc
 

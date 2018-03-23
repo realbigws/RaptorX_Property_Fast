@@ -5,7 +5,7 @@ usage()
 {
 	echo "Sequence Feature Generate "
 	echo ""
-	echo "USAGE:  ./Seq_Feat.sh [-i input_fasta] [-l label_file]"
+	echo "USAGE:  ./Seq_Feat.sh [-i input_fasta] [-l label_file] [-k keep_tmp]"
 	echo ""
 	exit 1
 }
@@ -32,11 +32,10 @@ fi
 #-> required arguments
 input=""
 label="-1"
-input_fasta=""
 Keep_file=0
 
 #-> parse arguments
-while getopts ":i:l:" opt;
+while getopts ":i:l:k:" opt;
 do
 	case $opt in
 	#-> required arguments
@@ -45,6 +44,10 @@ do
 		;;
 	l)
 		label=$OPTARG
+		;;
+	#-> optional arguments
+	k)
+		Keep_file=$OPTARG
 		;;
 	#-> default
 	\?)
@@ -96,7 +99,7 @@ fi
 
 # ----- pre process ------ #
 cd $RaptorX_HOME
-tmp=tmp"_"$relnam"_"$RANDOM
+tmp=/tmp/${relnam}_memb/
 mkdir -p $tmp/
 rm -f $tmp/$relnam.seq
 if [ $has_fasta -eq 1 ]

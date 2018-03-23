@@ -13,7 +13,6 @@ tmp_root=$2
 RaptorX_HOME=~/RaptorX_Property_Fast
 fulnam=`basename $tgt_file`
 relnam=${fulnam%.*}
-mkdir -p $RaptorX_HOME/$tmp_root
 SS8Pred=$RaptorX_HOME/bin/DeepCNF_SS_Con
-$SS8Pred -t $tgt_file > $RaptorX_HOME/$tmp_root/$relnam.ss8
+$SS8Pred -t $tgt_file > $tmp_root/$relnam.ss8
 
