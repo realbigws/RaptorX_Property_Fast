@@ -100,11 +100,11 @@ mkdir -p $tmp_root
 
 # ---- verify FASTA file -------- #
 seq_file=$relnam.seq
-util/Verify_FASTA $input_fasta $seq_file
+util/Verify_FASTA $input_fasta $tmp_root/$seq_file
 OUT=$?
 if [ $OUT -ne 0 ]
 then
-	echo "failed in util/Verify_FASTA $input_fasta $seq_file"
+	echo "failed in util/Verify_FASTA $input_fasta $tmp_root/$seq_file"
 	exit 1
 fi
 
@@ -113,7 +113,7 @@ fi
 if [ $coverage -eq -1 ]
 then
 	a=60
-	b=`tail -n1 $seq_file | wc | awk '{print int(7000/($3-1))}'`
+	b=`tail -n1 $tmp_root/$seq_file | wc | awk '{print int(7000/($3-1))}'`
 	if [ $a -gt $b ]
 	then
 		coverage=$b
@@ -125,7 +125,7 @@ fi
 
 # ---- generate A3M file -------- #
 a3m_file=$relnam.a3m
-if [ ! -f "$curdir/$a3m_file" ]
+if [ ! -f "$tmp_root/$a3m_file" ]
 then
 	echo "hhblits start with database $uniprot20"
 	HHSUITE=hhsuite
@@ -133,43 +133,41 @@ then
 	if [ $coverage -eq -2 ]
 	then
 		echo "run HHblits with default parameter without -cov "
-		$HHSUITE/bin/hhblits -i $seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $relnam.hhr -oa3m $relnam.a3m -n $iteration
+		$HHSUITE/bin/hhblits -i $tmp_root/$seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $tmp_root/$relnam.hhr -oa3m $tmp_root/$relnam.a3m -n $iteration
 	else
 		echo "run HHblits with -maxfilt 500000 -diff inf -id 99 -cov $coverage"
-		$HHSUITE/bin/hhblits -i $seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $relnam.hhr -oa3m $relnam.a3m -n $iteration -maxfilt 500000 -diff inf -id 99 -cov $coverage
+		$HHSUITE/bin/hhblits -i $tmp_root/$seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $tmp_root/$relnam.hhr -oa3m $tmp_root/$relnam.a3m -n $iteration -maxfilt 500000 -diff inf -id 99 -cov $coverage
 	fi
 	OUT=$?
 	if [ $OUT -ne 0 ]
 	then
-		echo "failed in $HHSUITE/bin/hhblits -i $seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $relnam.hhr -oa3m $relnam.a3m -n $iteration"
+		echo "failed in $HHSUITE/bin/hhblits -i $tmp_root/$seq_file -cpu $cpu_num -d databases/$uniprot20/$uniprot20 -o $tmp_root/$relnam.hhr -oa3m $tmp_root/$relnam.a3m -n $iteration"
 		exit 1
 	fi
-	mv $relnam.hhr $tmp_root
 	echo "hhblits done"
 fi
 
 # ---- generate TGT file ------ #
 tgt_file=$relnam.tgt
-if [ ! -f "$curdir/$tgt_file" ]
+if [ ! -f "$tmp_root/$tgt_file" ]
 then
-	./A3M_To_TGT -i $seq_file -I $a3m_file -o $tgt_file -t $tmp_root
+	./A3M_To_TGT -i $tmp_root/$seq_file -I $tmp_root/$a3m_file -o $tmp_root/$tgt_file -t $tmp_root
 	OUT=$?
 	if [ $OUT -ne 0 ]
 	then
-		echo "failed in ./A3M_To_TGT -i $seq_file -I $a3m_file -o $tgt_file -t $tmp_root"
+		echo "failed in ./A3M_To_TGT -i $tmp_root/$seq_file -I $tmp_root/$a3m_file -o $tmp_root/$tgt_file -t $tmp_root"
 		exit 1
 	fi
 fi
 
 # ---- post process ----- #
+cp $input_fasta $out_root/$relnam.fasta_raw
+mv $tmp_root/$seq_file $tmp_root/$a3m_file $tmp_root/$tgt_file $out_root
 if [ $kill_tmp -eq 1 ]
 then
 	rm -f $tmp_root/$relnam.*
 	rmdir $tmp_root
 fi
-cp $input_fasta $out_root/$relnam.fasta_raw
-mv $seq_file $a3m_file $tgt_file $out_root
-
 
 # ========= exit 0 =========== #
 exit 0

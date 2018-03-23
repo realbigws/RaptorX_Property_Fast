@@ -5,7 +5,7 @@ usage()
 {
 	echo "Sequence Feature Generate "
 	echo ""
-	echo "USAGE:  ./Seq_Feat.sh [-i input_fasta] [-o out_root] [-l label_file] [-k keep_tmp]"
+	echo "USAGE:  ./Seq_Feat_memb.sh [-i input_fasta] [-o out_root] [-l label_file] [-k keep_tmp]"
 	echo ""
 	exit 1
 }
