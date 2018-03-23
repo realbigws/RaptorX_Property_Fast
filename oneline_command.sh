@@ -29,14 +29,20 @@ OUT_DIR=$2
 
 # ------- run ProtProp Server --------- #
 Server_Root=~/RaptorX_Property_Fast
-cp $1 $Server_Root/$relnam.fasta
+util/Verify_FASTA $1 /tmp/$relnam.fasta
+OUT=$?
+if [ $OUT -ne 0 ]
+then
+	echo "failed in util/Verify_FASTA $1 /tmp/$relnam.fasta"
+	exit 1
+fi
 
 # ---- check if TGT file exist ----- #
 has_TGT=0
 if [ -f "$relnam.tgt" ]
 then
 	has_TGT=1
-	cp $relnam.tgt $Server_Root/
+	cp $relnam.tgt /tmp/
 fi
 
 # ---- running ---------#
@@ -59,7 +65,7 @@ cd $Server_Root
 			then
 				#--> Fast_TGT
 				echo "Running Fast_TGT to generate TGT file for sequence $relnam"
-				./Fast_TGT.sh -i $relnam.fasta -c $BindX_CPU -o $tmp 1> $tmp/$relnam.tgt_log1 2> $tmp/$relnam.tgt_log2
+				./Fast_TGT.sh -i /tmp/$relnam.fasta -c $BindX_CPU -o $tmp 1> $tmp/$relnam.tgt_log1 2> $tmp/$relnam.tgt_log2
 				OUT=$?
 				if [ $OUT -ne 0 ]
 				then
@@ -68,10 +74,10 @@ cd $Server_Root
 					break
 				fi
 			else
-				mv $relnam.tgt $tmp/$relnam.tgt
+				mv /tmp/$relnam.tgt $tmp/$relnam.tgt
 			fi
-			util/Verify_FASTA $relnam.fasta $tmp/$relnam.seq
-			cp $relnam.fasta $tmp/$relnam.fasta_raw
+			util/Verify_FASTA /tmp/$relnam.fasta $tmp/$relnam.seq
+			cp /tmp/$relnam.fasta $tmp/$relnam.fasta_raw
 			#-> 1.1 TGT Update
 			echo "Running TGT_Update to upgrade TGT file for sequence $relnam"
 			tmptmp=/tmp/TMPTMP"_"$relnam"_"$RANDOM
@@ -130,11 +136,10 @@ cd $Server_Root
 		else     #-> not use profile
 
 			#-> 1. generate feature file
-			util/Verify_FASTA $relnam.fasta $tmp/$relnam.seq
-			cp $relnam.fasta $tmp/$relnam.fasta_raw
+			util/Verify_FASTA /tmp/$relnam.fasta $tmp/$relnam.seq
+			cp /tmp/$relnam.fasta $tmp/$relnam.fasta_raw
 			#--> feat_file
-			./Seq_Feat.sh -i $tmp/$relnam.seq
-			mv $relnam.feat_noprof $tmp/$relnam.feat_noprof
+			./Seq_Feat.sh -i $tmp/$relnam.seq -o $tmp/
 			OUT=$?
 			if [ $OUT -ne 0 ]
 			then
@@ -374,6 +379,6 @@ cd $Server_Root
 
 	# ------ remove temporary folder ----- #
 	rm -rf $tmp/
-	rm -f $relnam.fasta
+	rm -f /tmp/$relnam.fasta
 cd $CurRoot
 

@@ -5,7 +5,7 @@ usage()
 {
 	echo "Sequence Feature Generate "
 	echo ""
-	echo "USAGE:  ./Seq_Feat.sh [-i input_fasta]"
+	echo "USAGE:  ./Seq_Feat.sh [-i input_fasta] [-o out_root] [-k keep_tmp] "
 	echo ""
 	exit 1
 }
@@ -31,16 +31,23 @@ fi
 # ----- get arguments ----- #
 #-> required arguments
 input=""
-input_fasta=""
+out_root="./"
 Keep_file=0
 
 #-> parse arguments
-while getopts ":i:" opt;
+while getopts ":i:o:k:" opt;
 do
 	case $opt in
 	#-> required arguments
 	i)
 		input=$OPTARG
+		;;
+	#-> optional arguments
+	o)
+		out_root=$OPTARG
+		;;
+	k)
+		Keep_file=$OPTARG
 		;;
 	#-> default
 	\?)
@@ -106,9 +113,9 @@ for ((i=0;i<1;i++))
 do
 	# ----- generate predicted SSE and ACC ----- #
 	cd util/psisolvpred
-		./runxxxpred_single ../../$tmp/$relnam.seq 1> $relnam.ws1 2> $relnam.ws2
-		mv $relnam.solv $relnam.ss2 ../../$tmp
-		rm -f $relnam.ss $relnam.horiz $relnam.ws1 $relnam.ws2
+		./runxxxpred_single $tmp/$relnam.seq 1> $tmp/$relnam.ws1 2> $tmp/$relnam.ws2
+		mv /tmp/$relnam.solv /tmp/$relnam.ss2 $tmp
+		rm -f /tmp/$relnam.ss /tmp/$relnam.horiz $tmp/$relnam.ws1 $tmp/$relnam.ws2
 	cd ../../
 	# ----- generate feature ----- #
 	$util/Diso_Feature_Make_noprof $tmp/$relnam.seq $tmp/$relnam.ss2 $tmp/$relnam.solv -1 > $tmp/$relnam.feat_noprof
@@ -119,7 +126,7 @@ do
 		program_suc=0
 		break
 	fi
-	cp $tmp/$relnam.feat_noprof $relnam.feat_noprof
+	cp $tmp/$relnam.feat_noprof $out_root/$relnam.feat_noprof
 done
 
 # ----- return back ----#

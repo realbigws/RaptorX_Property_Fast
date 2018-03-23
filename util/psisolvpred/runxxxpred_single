@@ -31,7 +31,7 @@ tmproot=psitmp$$$hostid
 
 echo "Generating mtx file from sequence" $1 "..."
 
-$execdir/seq2mtx $1 > $tmproot.mtx
+$execdir/seq2mtx $1 > /tmp/$tmproot.mtx
 if [ $? -ne 0 ] 
 then
     echo "FATAL: Error whilst running makemat - script terminated!"
@@ -41,7 +41,7 @@ fi
 echo "Predicting secondary structure based on single sequence ..."
 echo Pass1 ...
 
-$execdir/psipred $tmproot.mtx $datadir/weights.dat $datadir/weights.dat2 $datadir/weights.dat3 > $rootname.ss
+$execdir/psipred /tmp/$tmproot.mtx $datadir/weights.dat $datadir/weights.dat2 $datadir/weights.dat3 > /tmp/$rootname.ss
 if [ $? -ne 0 ]
 then
     echo "FATAL: Error whilst running psipred - script terminated!"
@@ -50,7 +50,7 @@ fi
 
 echo Pass2 ...
 
-$execdir/psipass2 $datadir/weights_p2.dat 1 1.0 1.0 $rootname.ss2 $rootname.ss > $rootname.horiz
+$execdir/psipass2 $datadir/weights_p2.dat 1 1.0 1.0 /tmp/$rootname.ss2 /tmp/$rootname.ss > /tmp/$rootname.horiz
 if [ $? -ne 0 ]
 then
     echo "FATAL: Error whilst running psipass2 - script terminated!"
@@ -59,7 +59,7 @@ fi
 
 
 # Run SOLVPRED
-$execdir/solvpred $tmproot.mtx $datadir/weights_solv.dat > $rootname.solv
+$execdir/solvpred /tmp/$tmproot.mtx $datadir/weights_solv.dat > /tmp/$rootname.solv
 if [ $? -ne 0 ]
 then
     echo "FATAL: Error whilst running MetaPSICOV solvpred - script terminated!"
@@ -70,7 +70,7 @@ fi
 # Remove temporary files
 
 echo Cleaning up ...
-rm -f $tmproot.* error.log
+rm -f /tmp/$tmproot.* error.log
 
 echo "Final output files:" $rootname.ss2 $rootname.horiz
 echo "Finished."
