@@ -44,7 +44,7 @@ cd $Server_Root
 	#-> 0. create 'tmp' folder
 	rm -rf $OUT_DIR/$relnam
 	mkdir -p $OUT_DIR/$relnam
-	tmp=TMP"_"$relnam"_"$RANDOM
+	tmp=/tmp/TMP"_"$relnam"_"$RANDOM
 	mkdir -p $tmp/
 	#------- start -------#
 	util=bin
@@ -74,7 +74,7 @@ cd $Server_Root
 			cp $relnam.fasta $tmp/$relnam.fasta_raw
 			#-> 1.1 TGT Update
 			echo "Running TGT_Update to upgrade TGT file for sequence $relnam"
-			tmptmp=TMPTMP"_"$relnam"_"$RANDOM
+			tmptmp=/tmp/TMPTMP"_"$relnam"_"$RANDOM
 			mkdir -p $tmptmp
 			mkdir -p $tmp/update/
 			./TGT_Update -i $tmp/$relnam.tgt -o $tmp/update/$relnam.tgt -t $tmptmp

@@ -7,7 +7,7 @@ usage()
 	echo "USAGE: ./Fast_TGT.sh <-i input_fasta> [-n iteration] [-C coverage] "
 	echo "       [-o out_root] [-j job_id] [-c CPU_num] [-k kill_tmp] [-d uniprot20]"
 	echo "[note1]: default HHblits iteration number is 3, CPU_num is 4, "
-	echo "         and kill_tmp is 1 to remove temporary files. "
+	echo "         and kill_tmp is 1 to remove temporary files in /tmp/\${input_name}_\${job_id}/. "
 	echo "[note2]: Default value of job_id is tmp, out_root is current directory. "
 	echo "[note3]: Default coverage is -2, i.e., NOT use -cov in HHblits. "
 	echo "         if set to -1, then automatically determine coverate value. "
@@ -93,7 +93,7 @@ fulnam=`basename $input_fasta`
 relnam=${fulnam%.*}
 
 # --- create temporary folder --#
-tmp_root=$relnam"_"$job_id/
+tmp_root=/tmp/$relnam"_"$job_id/
 mkdir -p $out_root
 mkdir -p $tmp_root
 
