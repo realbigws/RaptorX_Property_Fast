@@ -90,6 +90,24 @@ http://wwwuser.gwdg.de/~compbiol/uniclust/2017_10/uniclust30_2017_10_hhsuite.tar
 
 
 
+=======
+Server:
+=======
+
+1. Please try to use our RaptorX Property server at:
+http://raptorx.uchicago.edu/StructurePropertyPred/predict/
+
+
+2. Users may also use the 'curl' command to submit their jobs. For example,
+curl --form jobname=test_job --form email=user@domain --form sequences=ENIEVHMLNKGAEGAMVFEPAYIKANPGDTVTFIPVDKGHNVESIKDMIPEGAEKFKSKINENYVLTVTQPGAYLVKCTPHYAMGMIALIAVGDSPANLDQIVSAKKPKIVQERLEKVIASAK http://raptorx.uchicago.edu/StructurePropertyPred/curl/
+
+[note]: 
+(i) the 'email' is NOT required.
+(ii) the 'job_url' and 'down_url' will be displayed after the 'curl' command is executed.
+
+
+
+
 ======
 Usage:
 ======
