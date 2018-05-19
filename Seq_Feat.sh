@@ -99,7 +99,7 @@ fi
 
 # ----- pre process ------ #
 cd $RaptorX_HOME
-tmp=tmp"_"$relnam"_"$RANDOM
+tmp=/tmp/tmp"_"$relnam"_"$RANDOM
 mkdir -p $tmp/
 rm -f $tmp/$relnam.seq
 if [ $has_fasta -eq 1 ]

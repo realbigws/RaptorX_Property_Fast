@@ -247,9 +247,9 @@ do
 	else
 		# ----- generate predicted SSE and ACC ----- #
 		cd util/psisolvpred
-			./runxxxpred_single ../../$tmp/$relnam.seq 1> $relnam.ws1 2> $relnam.ws2
-			mv $relnam.solv $relnam.ss2 ../../$tmp
-			rm -f $relnam.ss $relnam.horiz $relnam.ws1 $relnam.ws2
+			./runxxxpred_single $tmp/$relnam.seq 1> $tmp/$relnam.ws1 2> $tmp/$relnam.ws2
+			mv /tmp/$relnam.solv /tmp/$relnam.ss2 $tmp
+			rm -f /tmp/$relnam.ss /tmp/$relnam.horiz $tmp/$relnam.ws1 $tmp/$relnam.ws2
 		cd ../../
 		# ----- generate feature ----- #
 		$util/Diso_Feature_Make_noprof $tmp/$relnam.seq $tmp/$relnam.ss2 $tmp/$relnam.solv -1 > $tmp/$relnam.feat_noprof

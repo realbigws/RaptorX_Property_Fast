@@ -1,6 +1,6 @@
 ===================================
 RaptorX Property Standalone Package
-(v1.01) 2017.01.06
+(v1.02) 2018.05.18
 ===================================
 
 Title:
@@ -77,12 +77,16 @@ mkdir -p databases/uniprot20
 
 2. download the UniProt20 database from the following link:
 
-http://wwwuser.gwdg.de/~compbiol/data/hhsuite/databases/hhsuite_dbs/uniprot20_2016_02.tgz
+http://wwwuser.gwdg.de/~compbiol/data/hhsuite/databases/hhsuite_dbs/old-releases/uniprot20_2016_02.tgz
 
 uncompressed it, and move all files or symbol link to databases/uniprot20_2016_02
 
 
 3. if other version of UniProt20 is applied, then use '-d uniprot20_XXXX' option in ./Fast_TGT.sh
+
+
+4. note that the new UniClust30 database could also be applied, such as:
+http://wwwuser.gwdg.de/~compbiol/uniclust/2017_10/uniclust30_2017_10_hhsuite.tar.gz
 
 
 
