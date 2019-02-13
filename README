@@ -106,6 +106,10 @@ curl --form jobname=test_job --form email=user@domain --form sequences=ENIEVHMLN
 (ii) the 'job_url' and 'down_url' will be displayed after the 'curl' command is executed.
 
 
+3. I have also implemented a simplified and command-line version of 'curl'. See below,
+https://github.com/realbigws/curl_command
+
+
 
 
 ======
