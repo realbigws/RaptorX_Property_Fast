@@ -1,3 +1,24 @@
+===========
+WARNING!!!!
+===========
+
+This package is out-of-date. It has been splitted into two packages:
+
+1) TGT_Package
+https://github.com/realbigws/TGT_Package
+
+2) Predict_Property
+https://github.com/realbigws/Predict_Property
+
+The TGT_Package is used for generating the TGT file from a given sequence in FASTA format.
+
+The Predict_Property is used for predicting protein local properties from a given TGT file or FASTA file.
+
+
+Thus, the RaptorX_Property_Fast module won't be updated anymore.
+
+
+
 ===================================
 RaptorX Property Standalone Package
 (v1.02) 2018.05.18
